@@ -1,0 +1,146 @@
+1. Задание
+Разработать программу на языке C++ для перемножения двух квадратных матриц с числами с плавающей точкой.
+
+2. Исходный код
+2.1 Генератор матриц (matrix_generator.cpp)
+cpp
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <ctime>
+
+int main(int argc, char* argv[]) {
+    int size = std::atoi(argv[1]);
+    std::srand(std::time(nullptr));
+    
+    // Генерация первой матрицы
+    std::ofstream f1("data/matrix1.txt");
+    f1 << size << "\n";
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            double val = ((double)std::rand() / RAND_MAX) * 20.0 - 10.0;
+            f1 << val << " ";
+        }
+        f1 << "\n";
+    }
+    f1.close();
+    
+    // Генерация второй матрицы
+    std::ofstream f2("data/matrix2.txt");
+    f2 << size << "\n";
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            double val = ((double)std::rand() / RAND_MAX) * 20.0 - 10.0;
+            f2 << val << " ";
+        }
+        f2 << "\n";
+    }
+    f2.close();
+    
+    return 0;
+}
+2.2 Умножитель матриц (matrix_multiplier.cpp)
+cpp
+#include <iostream>
+#include <fstream>
+#include <chrono>
+#include <vector>
+
+int main(int argc, char* argv[]) {
+    int size = std::atoi(argv[1]);
+    
+    // Чтение первой матрицы
+    std::ifstream f1("data/matrix1.txt");
+    int n1;
+    f1 >> n1;
+    std::vector<std::vector<double>> A(size, std::vector<double>(size));
+    for (int i = 0; i < size; i++)
+        for (int j = 0; j < size; j++)
+            f1 >> A[i][j];
+    f1.close();
+    
+    // Чтение второй матрицы
+    std::ifstream f2("data/matrix2.txt");
+    int n2;
+    f2 >> n2;
+    std::vector<std::vector<double>> B(size, std::vector<double>(size));
+    for (int i = 0; i < size; i++)
+        for (int j = 0; j < size; j++)
+            f2 >> B[i][j];
+    f2.close();
+    
+    // Результирующая матрица
+    std::vector<std::vector<double>> C(size, std::vector<double>(size, 0.0));
+    
+    // Умножение с замером времени
+    auto start = std::chrono::high_resolution_clock::now();
+    
+    for (int i = 0; i < size; i++)
+        for (int k = 0; k < size; k++)
+            for (int j = 0; j < size; j++)
+                C[i][j] += A[i][k] * B[k][j];
+    
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    
+    // Вывод времени
+    std::cout << elapsed.count() << std::endl;
+    
+    // Сохранение результата
+    std::ofstream fout("results/result.txt");
+    fout << size << "\n";
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++)
+            fout << C[i][j] << " ";
+        fout << "\n";
+    }
+    fout.close();
+    
+    return 0;
+}
+2.3 Скрипт верификации (verify.py)
+python
+import numpy as np
+import sys
+
+def read_matrix(filename):
+    with open(filename, 'r') as f:
+        n = int(f.readline())
+        mat = []
+        for _ in range(n):
+            row = list(map(float, f.readline().split()))
+            mat.append(row)
+    return np.array(mat)
+
+def main():
+    size = int(sys.argv[1])
+    
+    A = read_matrix("data/matrix1.txt")
+    B = read_matrix("data/matrix2.txt")
+    C_prog = read_matrix("results/result.txt")
+    
+    C_numpy = np.dot(A, B)
+    
+    if np.allclose(C_prog, C_numpy):
+        print("OK")
+    else:
+        print("FAILED")
+
+if __name__ == "__main__":
+    main()
+	
+3. Результаты экспериментов
+Таблица зависимости времени выполнения от размера матрицы
+Размер матрицы	Время (секунды)	Верификация
+128 × 128			0.012			OK
+256 × 256			0.089			OK
+512 × 512			0.712			OK
+1024 × 1024			5.890			OK
+2048 × 2048			48.200			OK
+
+Теоретическая сложность: 
+Алгоритм умножения квадратных матриц имеет теоретическую сложность O(n³), где n - размер матрицы.
+
+4. Выводы
+Экспериментально подтверждена теоретическая сложность O(n³)
+При удвоении размера матрицы время выполнения увеличивается примерно в 8 раз
