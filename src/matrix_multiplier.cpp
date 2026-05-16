@@ -2,14 +2,18 @@
 #include <fstream>
 #include <chrono>
 #include <vector>
+#include <omp.h>
 
 int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        std::cout << "Usage: multiplier.exe <size>" << std::endl;
+    if (argc != 3) {
+        std::cout << "Usage: multiplier_omp.exe <size> <num_threads>" << std::endl;
         return 1;
     }
     
     int size = std::atoi(argv[1]);
+    int num_threads = std::atoi(argv[2]);
+    
+    omp_set_num_threads(num_threads);
     
     std::ifstream f1("data/matrix1.txt");
     int n1;
@@ -33,17 +37,24 @@ int main(int argc, char* argv[]) {
     
     auto start = std::chrono::high_resolution_clock::now();
     
-    for (int i = 0; i < size; i++)
-        for (int k = 0; k < size; k++)
-            for (int j = 0; j < size; j++)
-                C[i][j] += A[i][k] * B[k][j];
+    #pragma omp parallel for collapse(2) schedule(static)
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            double sum = 0.0;
+            for (int k = 0; k < size; k++) {
+                sum += A[i][k] * B[k][j];
+            }
+            C[i][j] = sum;
+        }
+    }
     
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
     
     std::cout << elapsed.count() << std::endl;
+    std::cout << num_threads << std::endl;
     
-    std::ofstream fout("results/result.txt");
+    std::ofstream fout("results/result_" + std::to_string(size) + "_" + std::to_string(num_threads) + ".txt");
     fout << size << "\n";
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++)
