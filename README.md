@@ -12,7 +12,6 @@
 
 ### 2.1 Умножитель матриц с MPI (`matrix_multiplier.cpp`)
 
-```cpp
 #include <iostream>
 #include <fstream>
 #include <chrono>
@@ -123,6 +122,7 @@ int main(int argc, char* argv[]) {
     MPI_Finalize();
     return 0;
 }
+
 ### 2.2 CMakeLists.txt с поддержкой MPI
 cmake_minimum_required(VERSION 3.10)
 project(MatrixMultiplication)
