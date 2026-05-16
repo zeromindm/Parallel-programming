@@ -8,10 +8,8 @@
 - Размера матриц (200, 400, 800, 1200, 1600, 2000)
 - Количества процессов (1, 2, 4, 8)
 
-## 2. Модифицированный код
-
-### 2.1 Умножитель матриц с MPI (`matrix_multiplier.cpp`)
-
+## 2. Модифицированный код умножитель матриц с MPI 
+matrix_multiplier.cpp
 #include <iostream>
 #include <fstream>
 #include <chrono>
@@ -123,28 +121,7 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-### 2.2 CMakeLists.txt с поддержкой MPI
-cmake_minimum_required(VERSION 3.10)
-project(MatrixMultiplication)
 
-set(CMAKE_CXX_STANDARD 11)
-
-find_package(MPI REQUIRED)
-
-file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
-file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/data)
-file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/results)
-
-add_executable(generator src/matrix_generator.cpp)
-set_target_properties(generator PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
-)
-
-add_executable(multiplier_mpi src/matrix_multiplier_mpi.cpp)
-target_link_libraries(multiplier_mpi MPI::MPI_CXX)
-set_target_properties(multiplier_mpi PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
-)
 ## 3. Результаты экспериментов MPI
 
 ### 3.1 Таблица времени выполнения (секунды)
