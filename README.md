@@ -9,6 +9,7 @@
 
 ## 2.1 Модифицированная часть кода
 matrix_multiplier.cpp
+```cpp
 #include <iostream>
 #include <fstream>
 #include <chrono>
@@ -76,6 +77,7 @@ int main(int argc, char* argv[]) {
     
     return 0;
 }
+```
 	
 3. Результаты экспериментов
 Таблица зависимости времени выполнения от размера матрицы
