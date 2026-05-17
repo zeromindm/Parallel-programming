@@ -9,7 +9,6 @@
 
 ### 2.1 Умножитель матриц с CUDA (`matrix_multiplier.cu`)
 
-```cpp
 #include <iostream>
 #include <fstream>
 #include <chrono>
