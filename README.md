@@ -8,7 +8,8 @@
 ## 2. Модифицированный код
 
 ### 2.1 Умножитель матриц с CUDA (`matrix_multiplier.cu`)
-'''cpp
+
+```cpp
 #include <iostream>
 #include <fstream>
 #include <chrono>
@@ -71,8 +72,8 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    int N = std::atoi(argv[1]);          // Размер матрицы
-    int block_size = std::atoi(argv[2]); // Размер блока (16 или 32)
+    int N = std::atoi(argv[1]);
+    int block_size = std::atoi(argv[2]);
     
     std::ifstream f1("data/matrix1.txt");
     int n;
@@ -137,6 +138,7 @@ int main(int argc, char* argv[]) {
     
     return 0;
 }
+
 ## 3. Результаты экспериментов CUDA (на GPU с 1024 ядрами)
 
 ### 3.1 Таблица времени выполнения (секунды) - Базовое ядро
