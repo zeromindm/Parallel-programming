@@ -9,7 +9,7 @@
 
 ### 2.1 Умножитель матриц с CUDA (`matrix_multiplier.cu`)
 
-
+```cpp
 #include <iostream>
 #include <fstream>
 #include <chrono>
@@ -138,6 +138,7 @@ int main(int argc, char* argv[]) {
     
     return 0;
 }
+```
 
 ## 3. Результаты экспериментов CUDA (на GPU с 1024 ядрами)
 
