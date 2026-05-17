@@ -9,6 +9,7 @@
 - Количества процессов (1, 2, 4, 8)
 
 ## 2. Модифицированный код умножитель матриц с MPI 
+```cpp
 matrix_multiplier.cpp
 #include <iostream>
 #include <fstream>
@@ -120,7 +121,7 @@ int main(int argc, char* argv[]) {
     MPI_Finalize();
     return 0;
 }
-
+```
 
 ## 3. Результаты экспериментов MPI
 
